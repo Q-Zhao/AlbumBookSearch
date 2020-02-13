@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+                        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<context:component-scan base-package="com.mycompany.search">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<bean id="searchConfig" class="com.mycompany.search.config.SearchConfig">
+		
+		<!-- ITunes Search Configuration -->
+		<property name="iTunesSearchURL" value="https://itunes.apple.com/search"></property>
+		<property name="iTunesSearchLimit" value="5"></property>
+		<property name="iTunesSearchEntity" value="album"></property>
+
+		<!-- Google Book Search Configuration -->
+		<property name="googleBookSearchURL" value="https://www.googleapis.com/books/v1/volumes"></property>
+		<property name="googleSearchLimit" value="5"></property>
+		
+		<!-- General Configuration -->
+		<property name="timedOutInSeconds" value="30"></property>
+	</bean>
+	
+	<bean id="searchService" class="com.mycompany.search.service.SearchService">
+		<property name="searchClientPool" >
+			<list>
+				<ref bean="itunesClient"/>
+				<ref bean="googleBookClient"/>
+			</list>
+		</property>
+		<property name="resultSorter" ref="resultSorter"></property>
+	</bean>
+	
+	<bean id="resultSorter" class="com.mycompany.search.resultprocessor.ResultTitleSorter"/>
+	
+	<bean id="baseTemplateClient" class="com.mycompany.search.client.BaseTemplateClient" init-method="initialize" abstract="true">
+		<property name="config" ref="searchConfig"></property>
+	</bean>
+	
+	<bean id="itunesClient" class="com.mycompany.search.client.itunes.ITunesClient" parent="baseTemplateClient"></bean>
+	
+	<bean id="googleBookClient" class="com.mycompany.search.client.googlebooks.GoogleBookClient" parent="baseTemplateClient"></bean>
+	
+</beans>
