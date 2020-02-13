@@ -13,6 +13,9 @@ Deploy the war file to Tomcat server and start tomcat, you should be able to acc
 
 Input some keywords, and press search button to see search results.
 
+**Server logs:**
+Once the Tomcat server starts with this web application deployed, a folder named "AlbumBookSearch" that contains the log file will be created automatically under {Tomcat}/logs folder.
+
 **Sample API request:**
 
 {
