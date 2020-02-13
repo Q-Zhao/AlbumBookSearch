@@ -1,12 +1,17 @@
 # Descriptions
 
+**Summary:**
+This is a demo searching keywords from iTunes and Google Books. It contains back-end server and simple front-end pages.
+
 **Build the project:**
 Run the following command with pom.xml, a searchService.war file will be created. This application was run/tested on my mac machine only at this moment.
 ```
 mvn clean install -DskipTests
 ```
 **Run the project:**
-Deploy the war file to Tomcat server and start tomcat, you should be able to access: http://localhost:8080/searchService/
+Deploy the war file to Tomcat server and start tomcat, you should be able to access the UI page: http://localhost:8080/searchService/
+
+Input some keywords, and press search button to see search results.
 
 **Sample API request:**
 
